@@ -12,3 +12,55 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum NoteDetailLevel {
+  overview
+  studyGuide
+  detailed
+}
+
+enum ExerciseDetailLevel {
+  shallow
+  comprehensive
+}
+
+model Topic {
+  id       String    @id
+  title    String
+  contexts Context[]
+}
+
+model Context {
+  id        String     @id
+  title     String
+  content   String
+  topicId   String
+  topic     Topic      @relation(fields: [topicId], references: [id])
+  notes     Note[]
+  exercises Exercise[]
+
+  @@index([topicId])
+}
+
+model Note {
+  id          String          @id
+  content     String
+  contextId   String
+  context     Context         @relation(fields: [contextId], references: [id])
+  order       Int
+  detailLevel NoteDetailLevel
+
+  @@index([contextId])
+}
+
+model Exercise {
+  id          String              @id
+  question    String
+  answer      String
+  contextId   String
+  context     Context             @relation(fields: [contextId], references: [id])
+  order       String
+  detailLevel ExerciseDetailLevel
+
+  @@index([contextId])
+}

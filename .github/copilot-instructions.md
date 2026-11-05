@@ -62,9 +62,20 @@ real domain rules, not as boilerplate for every CRUD operation.
 - Translate transport input into application calls and map results/errors to
   HTTP status codes and response shapes. Keep HTTP concerns here; do not put
   business rules or persistence queries in controllers and routers.
-- Keep dependency construction in the application's composition root
-  (`app.ts`/`server.ts` as appropriate). Routers should declare routes and
-  delegate, rather than choosing concrete repositories themselves.
+- Controllers are plain functions, not classes: one standard Express
+  `(req, res)` function per endpoint (e.g. `loginController`), grouped by
+  resource in files such as `controller/authController.ts`. The services a
+  controller needs are instantiated once at module level, after the imports
+  and before the functions (e.g. `const authService = new AuthService(...)`),
+  and the controller functions use them directly. Do not use classes or
+  handler factories for controllers.
+- Middleware follows the same pattern as controllers: plain Express
+  `(req, res, next)` functions, with any services instantiated once at module
+  level after the imports (e.g. `authMiddleware.ts`). No handler factories.
+- Routers only declare routes and pass the controller functions directly
+  (`router.post("/login", loginController)`); export the router as the
+  default export and mount it in `app.ts`. Routers must not instantiate
+  services or repositories.
 
 ## Dependency direction and request flow
 
@@ -74,14 +85,14 @@ request flows inward and its result flows back outward:
 `HTTP request → interface controller/router → application use case → domain`
 
 The use case accesses data through a repository/port contract. An infrastructure
-adapter implements that contract, and the composition root wires the adapter
-into the use case:
+adapter implements that contract, and the controller module wires the adapter
+into the use case at module level:
 
 `interface → application → domain ← infrastructure`
 
 The source-code dependency points inward toward domain abstractions. The
-composition root is the deliberate place that knows both the abstractions and
-their concrete implementations. Do not add a direct `domain` → `application`,
+controller module is the deliberate place in `interface/` that knows both the
+abstractions and their concrete implementations. Do not add a direct `domain` → `application`,
 `infrastructure`, or `interface` dependency. Keep the domain model and its
 business rules independent of HTTP and storage technologies.
 
