@@ -63,6 +63,20 @@ npx prisma migrate reset
 6. Run script.ts
 
 ```bash
-npx tsx src/scripts.ts
+npx tsx src/script.ts
 
 ```
+
+### Topic endpoints
+
+These endpoints require a bearer token obtained from `POST /api/auth/login`.
+Successful responses use the standard `success`, `message`, and `data` envelope.
+
+- `GET /topic` lists topics.
+- `GET /topic/:id` retrieves a topic.
+- `POST /topic` creates a topic from `{ "context": "..." }`.
+- `PUT /topic/:id` updates its title with `{ "title": "..." }`.
+- `DELETE /topic/:id` removes the topic and its contexts.
+
+Creation returns HTTP 201; missing topics return 404, and missing or blank
+context or title values return 400.

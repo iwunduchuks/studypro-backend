@@ -1,5 +1,5 @@
 import { timingSafeEqual } from "node:crypto";
-import type { TokenService } from "../domain/services/tokenService.js";
+import type { TokenService } from "../interfaces/tokenService.interface.js";
 
 export class InvalidCredentialsError extends Error {
   constructor() {

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { AuthService } from "../../../application/authService.js";
+import { AuthService } from "../../../application/services/authService";
 import { JwtTokenService } from "../../../infrastructure/jwt/jwtTokenService.js";
 
 const tokenService = new JwtTokenService(

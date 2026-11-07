@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import {
   AuthService,
   InvalidCredentialsError,
-} from "../../../application/authService.js";
+} from "../../../application/services/authService";
+
 import { JwtTokenService } from "../../../infrastructure/jwt/jwtTokenService.js";
 import { apiResponse } from "../../../utils/apiResponse.js";
 

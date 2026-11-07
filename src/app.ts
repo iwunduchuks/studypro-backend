@@ -3,6 +3,7 @@ import { errorLogger } from "./interface/http/middleware/errorLogger.js";
 import requestLogger from "./interface/http/middleware/requestLogger.js";
 import authRouter from "./interface/http/router/authRouter.js";
 import { authMiddleware } from "./interface/http/middleware/authMiddleware.js";
+import topicRouter from "./interface/http/router/topicRouter.js";
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(express.json());
 app.use(requestLogger);
 
 app.use("/api/auth", authRouter);
+app.use("/api/topic", authMiddleware, topicRouter);
 
 app.get("/", authMiddleware, (req, res) => {
   res.json("Welcome to your Server");

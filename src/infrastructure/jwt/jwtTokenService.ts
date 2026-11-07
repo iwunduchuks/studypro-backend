@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import type { TokenService } from "../../domain/services/tokenService.js";
+import type { TokenService } from "../../application/interfaces/tokenService.interface.js";
 
 export class JwtTokenService implements TokenService {
   constructor(

@@ -6,4 +6,8 @@ export class Topic {
     public title: string,
     public contexts: Context[],
   ) {}
+
+  addContext(context: Context): void {
+    this.contexts.push(context);
+  }
 }
