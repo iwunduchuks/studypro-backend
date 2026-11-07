@@ -51,23 +51,6 @@ export class PrismaTopicRepository implements TopicRepository {
     });
   }
 
-  async updateTitle(id: string, title: string): Promise<Topic | null> {
-    return this.client.$transaction(async (transaction) => {
-      const result = await transaction.topic.updateMany({
-        where: { id },
-        data: { title },
-      });
-      if (result.count === 0) return null;
-
-      const topic = await transaction.topic.findUnique({
-        where: { id },
-        include: topicWithContexts,
-      });
-      if (!topic) throw new Error(`Topic ${id} was not found after updating`);
-      return toDomain(topic);
-    });
-  }
-
   async remove(id: string): Promise<boolean> {
     return this.client.$transaction(async (transaction) => {
       await transaction.exercise.deleteMany({

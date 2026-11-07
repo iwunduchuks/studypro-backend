@@ -10,14 +10,6 @@ export class TopicService {
     private readonly titleGenerator: TopicTitleGenerator,
   ) {}
 
-  async findAll(): Promise<Topic[]> {
-    return this.topicRepository.findAll();
-  }
-
-  async findById(id: string): Promise<Topic | null> {
-    return this.topicRepository.findById(id);
-  }
-
   async create(content: string): Promise<Topic> {
     const [topicTitle, contextTitle] = await Promise.all([
       this.titleGenerator.generate(content, "short"),
@@ -30,10 +22,10 @@ export class TopicService {
   }
 
   async updateTitle(id: string, title: string): Promise<Topic | null> {
-    return this.topicRepository.updateTitle(id, title);
-  }
+    const topic = await this.topicRepository.findById(id);
+    if (!topic) return null;
 
-  async remove(id: string): Promise<boolean> {
-    return this.topicRepository.remove(id);
+    topic.title = title;
+    return this.topicRepository.save(topic);
   }
 }

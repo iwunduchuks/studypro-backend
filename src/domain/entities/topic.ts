@@ -10,4 +10,12 @@ export class Topic {
   addContext(context: Context): void {
     this.contexts.push(context);
   }
+
+  removeContext(id: string): boolean {
+    const index = this.contexts.findIndex((context) => context.id === id);
+    if (index === -1) return false;
+
+    this.contexts.splice(index, 1);
+    return true;
+  }
 }
